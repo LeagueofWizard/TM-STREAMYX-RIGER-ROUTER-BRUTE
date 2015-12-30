@@ -44,7 +44,7 @@ def scheduler():
         
 if __name__ == '__main__' :
     target = str(raw_input('Target IP: '))
-    gevent.signal(signal.SIGQUIT, gevent.shutdown)
+    Greenlet.signal(signal.SIGQUIT, gevent.shutdown)
     Greenlet.spawn(scheduler).join()
     Greenlet.joinall([Greenlet.spawn(task, target)])
     
