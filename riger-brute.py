@@ -44,7 +44,7 @@ def task(target):
 
 def scheduler():
     for i in xrange(65536):
-        task.put_nowait(i)
+        req.put_nowait(i)
         
 if __name__ == '__main__' :
     target = str(raw_input('Target IP: '))
