@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import signal
 import requests
 from requests.exceptions import ConnectionError
+
 import gevent as Greenlet
 from  gevent.queue import Queue
 
