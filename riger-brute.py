@@ -40,7 +40,7 @@ def task(target):
             print 'Success!! Password is {}'.format(content)
             success = True
             
-    Greenlet.sleep(0)
+        Greenlet.sleep(0)
 
 def scheduler():
     for i in xrange(65536):
