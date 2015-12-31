@@ -8,7 +8,7 @@ import os
 import sys
 from requests.exceptions import ConnectionError
 
-if len(sys.argv）== 2:
+if len(sys.argv)== 2:
     target = str(sys.argv[1])
 else:
     print 'Usage: {} TARGET_IP'.format(sys.argv[0])
