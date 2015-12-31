@@ -5,6 +5,7 @@ import requests
 import threading
 import Queue
 import os
+import sys
 from requests.exceptions import ConnectionError
 
 if sys.argv[1]:
