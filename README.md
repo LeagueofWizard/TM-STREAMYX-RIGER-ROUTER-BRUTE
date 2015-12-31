@@ -9,6 +9,12 @@ Brute force Streamyx Riger Router default password.
 2. Install Python 2.7.
 3. ```python riger-brute.py```
 
+### Building (Python Hang Version)
+======
+1. Clone this repo and ```cd``` to the directory of this repo.
+2. Install Python 2.7.
+3. ```python riger-brute-hang.py TARGET_IP```
+
 ### Building (C#, Linux)
 ======
 1. Clone this repo and ```cd``` to the directory of this repo.
