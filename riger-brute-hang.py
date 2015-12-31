@@ -12,6 +12,7 @@ if len(sys.argv)== 2:
     target = str(sys.argv[1])
 else:
     print 'Usage: {} TARGET_IP'.format(sys.argv[0])
+    sys.exit(2)
     
 queue = Queue.Queue()
 threads = []
