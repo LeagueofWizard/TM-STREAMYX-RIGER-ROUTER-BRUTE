@@ -57,5 +57,4 @@ if __name__ == '__main__' :
     gevent.spawn(scheduler).join()
 
     threads = [gevent.spawn(task, target) for i in xrange(10)]
-    print str(threads)
     gevent.joinall(threads)
