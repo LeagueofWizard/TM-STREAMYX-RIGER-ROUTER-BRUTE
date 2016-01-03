@@ -91,10 +91,10 @@ if __name__ == '__main__' :
     part=0
     count_in_part=0
     for x in xrange(65536):
-        num=(65536/parts*part)+count_in_part
+        num=(65536/totalparts*part)+count_in_part
         queue.put(num)
 
-        if part>=parts-1:
+        if part>=totalparts-1:
             count_in_part+=1
             part=0
         else:
